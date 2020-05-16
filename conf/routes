@@ -2,11 +2,12 @@
 # This file defines all application routes (Higher priority routes first)
 # https://www.playframework.com/documentation/latest/ScalaRouting
 # ~~~~
-+ nocsrf
-GET     /api/usuario/:id        usuario.UsuarioController.pegar(id: reactivemongo.bson.BSONObjectID)
 
 + nocsrf
-POST     /api/usuario/criar        usuario.UsuarioController.criar
+GET     /api/usuarios/:id        usuario.UsuarioController.pegar(id: reactivemongo.bson.BSONObjectID)
+
++ nocsrf
+POST     /api/usuarios/criar        usuario.UsuarioController.criar
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
