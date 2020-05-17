@@ -1,11 +1,12 @@
-package usuario
+package api.usuario
 
 import java.time.LocalDateTime
 import org.mindrot.jbcrypt.BCrypt
 import base.Model
 import reactivemongo.bson.BSONObjectID
 
-case class Usuario(override val _id: BSONObjectID,
+case class Usuario(
+                    override val _id: BSONObjectID,
                    idPerfil: BSONObjectID,
                    email: String,
                    senha:String,

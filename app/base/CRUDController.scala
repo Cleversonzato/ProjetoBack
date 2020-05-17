@@ -4,9 +4,7 @@ import javax.inject.Inject
 import play.api.mvc._
 import play.api.Logging
 import play.api.i18n.I18nSupport
-import play.api.libs.json.JsValue
 import reactivemongo.bson.BSONObjectID
-import reactivemongo.play.json.JSONSerializationPack.Writer
 import reactivemongo.play.json._
 
 import scala.concurrent.{ExecutionContext, Future}

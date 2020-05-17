@@ -1,4 +1,4 @@
-package usuario
+package api.usuario
 
 import base.{CRUDController, JsonUtil}
 import javax.inject.{Inject, Singleton}
@@ -10,9 +10,9 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class UsuarioController  @Inject()(implicit ec: ExecutionContext, cc: ControllerComponents, service:UsuarioService) extends CRUDController[Usuario]{
 
-  import reactivemongo.play.json._;
+  import reactivemongo.play.json._
+  import reactivemongo.play.json.BSONFormats
   implicit def format: OFormat[Usuario] = Json.format[Usuario];
-
 
 
 }
