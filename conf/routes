@@ -5,47 +5,32 @@
 
 ###### Usuario
 GET     /api/usuarios/:id       api.usuario.UsuarioController.pegar(id: reactivemongo.bson.BSONObjectID)
-+ nocsrf
 POST    /api/usuarios/criar     api.usuario.UsuarioController.criar
-+ nocsrf
 PUT     /api/usuarios/atualizar api.usuario.UsuarioController.atualizar
-+ nocsrf
 DELETE  /api/usuarios/excluir/:id   api.usuario.UsuarioController.excluir(id: reactivemongo.bson.BSONObjectID)
 
 ###### Perfil
 GET     /api/perfis/:id       api.perfil.PerfilController.pegar(id: reactivemongo.bson.BSONObjectID)
-+ nocsrf
 POST    /api/perfis/criar     api.perfil.PerfilController.criar
-+ nocsrf
 PUT     /api/perfis/atualizar api.perfil.PerfilController.atualizar
-+ nocsrf
 DELETE  /api/perfis/excluir/:id   api.perfil.PerfilController.excluir(id: reactivemongo.bson.BSONObjectID)
 
 ###### PerfilPublico
 GET     /api/perfis/publico/:id       api.perfil.publico.PerfilPublicoController.pegar(id: reactivemongo.bson.BSONObjectID)
-+ nocsrf
 POST    /api/perfis/publico/criar     api.perfil.publico.PerfilPublicoController.criar
-+ nocsrf
 PUT     /api/perfis/publico/atualizar api.perfil.publico.PerfilPublicoController.atualizar
-+ nocsrf
 DELETE  /api/perfis/publico/excluir/:id    api.perfil.publico.PerfilPublicoController.excluir(id: reactivemongo.bson.BSONObjectID)
 
 ###### Processo
 GET     /api/processos/:id       api.processo.ProcessoController.pegar(id: reactivemongo.bson.BSONObjectID)
-+ nocsrf
 POST    /api/processos/criar     api.processo.ProcessoController.criar
-+ nocsrf
 PUT     /api/processos/atualizar api.processo.ProcessoController.atualizar
-+ nocsrf
 DELETE  /api/processso/excluir/:id    api.processo.ProcessoController.excluir(id: reactivemongo.bson.BSONObjectID)
 
 ###### InscricaoProcesso
 GET     /api/processos/inscricoes/:id       api.processo.inscricao.InscricaoProcessoController.pegar(id: reactivemongo.bson.BSONObjectID)
-+ nocsrf
 POST    /api/processos/inscricoes/criar     api.processo.inscricao.InscricaoProcessoController.criar
-+ nocsrf
 PUT     /api/processos/inscricoes/atualizar api.processo.inscricao.InscricaoProcessoController.atualizar
-+ nocsrf
 DELETE  /api/processos/inscricoes/excluir/:id    api.processo.inscricao.InscricaoProcessoController.excluir(id: reactivemongo.bson.BSONObjectID)
 
 
