@@ -1,1 +1,15 @@
-# https://www.playframework.com/documentation/latest/ScalaI18N
+lingua="Default language/en"
+
+#CONTROLLER
+erro.requisicao.indefinido = ' undefined.'
+erro.requisicao.json = 'The request is not a valid JSON.'
+
+##SERVICE
+erro.service.listar = 'Was not possible to access your data. Contact the administrator to more information.'
+erro.service.buscar = 'Was not possible to access your data. Contact the administrator to more information.'
+erro.service.buscar.vazio = 'Data not found: '
+erro.service.criar = 'Error while trying to create this item.'
+erro.service.criar.duplicado = 'Error while trying to create! This item already exists.'
+erro.service.criar.duplicado.usuario = 'This e-mail is already registered.'
+erro.service.editar = 'Erro na atualização! Tente novamente e, o erro persistir, contate o administrador.'
+sucesso.service.remover = 'Removed with success.'

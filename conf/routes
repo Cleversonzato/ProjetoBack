@@ -4,34 +4,34 @@
 # ~~~~
 
 ###### Usuario
-GET     /api/usuarios/:id       api.usuario.UsuarioController.pegar(id: reactivemongo.bson.BSONObjectID)
+GET     /api/usuarios/:id       api.usuario.UsuarioController.buscar(id: reactivemongo.bson.BSONObjectID)
 POST    /api/usuarios/criar     api.usuario.UsuarioController.criar
-PUT     /api/usuarios/atualizar api.usuario.UsuarioController.atualizar
-DELETE  /api/usuarios/excluir/:id   api.usuario.UsuarioController.excluir(id: reactivemongo.bson.BSONObjectID)
+PUT     /api/usuarios/editar    api.usuario.UsuarioController.editar
+DELETE  /api/usuarios/remover/:id   api.usuario.UsuarioController.remover(id: reactivemongo.bson.BSONObjectID)
 
 ###### Perfil
-GET     /api/perfis/:id       api.perfil.PerfilController.pegar(id: reactivemongo.bson.BSONObjectID)
+GET     /api/perfis/:id       api.perfil.PerfilController.buscar(id: reactivemongo.bson.BSONObjectID)
 POST    /api/perfis/criar     api.perfil.PerfilController.criar
-PUT     /api/perfis/atualizar api.perfil.PerfilController.atualizar
-DELETE  /api/perfis/excluir/:id   api.perfil.PerfilController.excluir(id: reactivemongo.bson.BSONObjectID)
+PUT     /api/perfis/editar      api.perfil.PerfilController.editar
+DELETE  /api/perfis/remover/:id   api.perfil.PerfilController.remover(id: reactivemongo.bson.BSONObjectID)
 
 ###### PerfilPublico
-GET     /api/perfis/publico/:id       api.perfil.publico.PerfilPublicoController.pegar(id: reactivemongo.bson.BSONObjectID)
+GET     /api/perfis/publico/:id       api.perfil.publico.PerfilPublicoController.buscar(id: reactivemongo.bson.BSONObjectID)
 POST    /api/perfis/publico/criar     api.perfil.publico.PerfilPublicoController.criar
-PUT     /api/perfis/publico/atualizar api.perfil.publico.PerfilPublicoController.atualizar
-DELETE  /api/perfis/publico/excluir/:id    api.perfil.publico.PerfilPublicoController.excluir(id: reactivemongo.bson.BSONObjectID)
+PUT     /api/perfis/publico/editar api.perfil.publico.PerfilPublicoController.editar
+DELETE  /api/perfis/publico/remover/:id    api.perfil.publico.PerfilPublicoController.remover(id: reactivemongo.bson.BSONObjectID)
 
 ###### Processo
-GET     /api/processos/:id       api.processo.ProcessoController.pegar(id: reactivemongo.bson.BSONObjectID)
+GET     /api/processos/:id       api.processo.ProcessoController.buscar(id: reactivemongo.bson.BSONObjectID)
 POST    /api/processos/criar     api.processo.ProcessoController.criar
-PUT     /api/processos/atualizar api.processo.ProcessoController.atualizar
-DELETE  /api/processso/excluir/:id    api.processo.ProcessoController.excluir(id: reactivemongo.bson.BSONObjectID)
+PUT     /api/processos/editar       api.processo.ProcessoController.editar
+DELETE  /api/processso/remover/:id    api.processo.ProcessoController.remover(id: reactivemongo.bson.BSONObjectID)
 
 ###### InscricaoProcesso
-GET     /api/processos/inscricoes/:id       api.processo.inscricao.InscricaoProcessoController.pegar(id: reactivemongo.bson.BSONObjectID)
+GET     /api/processos/inscricoes/:id       api.processo.inscricao.InscricaoProcessoController.buscar(id: reactivemongo.bson.BSONObjectID)
 POST    /api/processos/inscricoes/criar     api.processo.inscricao.InscricaoProcessoController.criar
-PUT     /api/processos/inscricoes/atualizar api.processo.inscricao.InscricaoProcessoController.atualizar
-DELETE  /api/processos/inscricoes/excluir/:id    api.processo.inscricao.InscricaoProcessoController.excluir(id: reactivemongo.bson.BSONObjectID)
+PUT     /api/processos/inscricoes/editar    api.processo.inscricao.InscricaoProcessoController.editar
+DELETE  /api/processos/inscricoes/remover/:id    api.processo.inscricao.InscricaoProcessoController.remover(id: reactivemongo.bson.BSONObjectID)
 
 
 # Map static resources from the /public folder to the /assets URL path

@@ -6,7 +6,7 @@ import base.Model
 import reactivemongo.bson.BSONObjectID
 
 case class Perfil(
-                   override val _id: BSONObjectID,
+                   override val id: Option[BSONObjectID],
                    papel: PapelPerfil,
                    nome: Option[String],
                    sobrenome: Option[String],

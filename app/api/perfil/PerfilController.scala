@@ -12,7 +12,7 @@ class PerfilController  @Inject()(implicit ec: ExecutionContext, cc: ControllerC
 
   import reactivemongo.play.json._
   import reactivemongo.play.json.BSONFormats
-  implicit def formatPapel: OFormat[PapelPerfil] = Json.format[PapelPerfil];
-  implicit def format: OFormat[Perfil] = Json.format[Perfil];
-
+  implicit def formatPapel: OFormat[PapelPerfil] = Json.format[PapelPerfil]
+  implicit def format: OFormat[Perfil] = Json.format[Perfil]
+  override def modelName: String = "Perfil"
 }

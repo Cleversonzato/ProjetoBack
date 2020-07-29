@@ -6,7 +6,7 @@ import base.Model
 import reactivemongo.bson.BSONObjectID
 
 case class Processo(
-                    override val _id: BSONObjectID,
+                    override val id: Option[BSONObjectID],
                     titulo: String,
                     descricao:Option[String],
                     criacao: LocalDateTime,

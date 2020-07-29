@@ -2,7 +2,7 @@ package api.usuario
 
 import base.{CRUDController, JsonUtil}
 import javax.inject.{Inject, Singleton}
-import play.api.libs.json.{JsPath, JsValue, Json, OFormat, OWrites, Reads}
+import play.api.libs.json.{JsError, JsObject, JsPath, JsResult, JsSuccess, JsValue, Json, OFormat, OWrites, Reads}
 import play.api.mvc.{AnyContent, ControllerComponents, Request, Result}
 
 import scala.concurrent.ExecutionContext
@@ -12,7 +12,7 @@ class UsuarioController  @Inject()(implicit ec: ExecutionContext, cc: Controller
 
   import reactivemongo.play.json._
   import reactivemongo.play.json.BSONFormats
-  implicit def format: OFormat[Usuario] = Json.format[Usuario];
+  implicit def format: OFormat[Usuario] = Json.format[Usuario]
 
-
+  override def modelName: String = "Usuario"
 }

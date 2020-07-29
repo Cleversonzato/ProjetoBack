@@ -6,7 +6,7 @@ import base.Model
 import reactivemongo.bson.BSONObjectID
 
 case class PerfilPublico(
-                          override val _id: BSONObjectID,
+                          override val id: Option[BSONObjectID],
                           idPerfil: BSONObjectID,
                           ultimaAlteracao: LocalDateTime,
                           tituloPerfil: String,

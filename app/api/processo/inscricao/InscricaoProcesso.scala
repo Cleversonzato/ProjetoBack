@@ -6,7 +6,7 @@ import base.Model
 import reactivemongo.bson.BSONObjectID
 
 case class InscricaoProcesso (
-                               override  val _id: BSONObjectID,
+                               override  val id: Option[BSONObjectID],
                               idPerfil: BSONObjectID,
                               idPerfilPublico: BSONObjectID,
                               nomeInscrito:String,

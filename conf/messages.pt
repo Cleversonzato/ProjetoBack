@@ -1,0 +1,17 @@
+lingua="Default language/en"
+
+#CONTROLLER
+erro.requisicao.indefinido = ' não definido'
+erro.requisicao.json = 'A requisição não é um JSON válido'
+
+##SERVICE
+erro.service.listar = 'Não foi possível acessar seus dados. Contate o administrador para maiores informações.'
+erro.service.buscar = 'Não foi possível acessar seus dados. Contate o administrador para maiores informações.'
+erro.service.buscar.vazio = 'Dados não encontrados: '
+erro.service.criar = 'Não foi possível criar este item.'
+erro.service.criar.duplicado = 'Falha ao tentar criar! Este item já está existe.
+erro.service.criar.duplicado.usuario = 'Este e-mail já está possui um cadastro'
+erro.service.editar = 'Erro na atualização! Tente novamente e, o erro persistir, contate o administrador.'
+sucesso.service.remover = 'Item removido com sucesso.'
+
+

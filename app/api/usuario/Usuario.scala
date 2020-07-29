@@ -6,18 +6,18 @@ import base.Model
 import reactivemongo.bson.BSONObjectID
 
 case class Usuario(
-                    override val _id: BSONObjectID,
-                   idPerfil: BSONObjectID,
-                   email: String,
-                   senha:String,
-                   dtCriacao:Option[LocalDateTime]
+                    override val id: Option[BSONObjectID],
+                    idPerfil: Option[BSONObjectID],
+                    email: String,
+                    senha: String,
+                    dtCriacao: Option[LocalDateTime]
                   )
   extends Model
 {
 
   //para novos usuários
-  def this(email: String, senha:String, dtCriacao:Option[LocalDateTime]) = {
-    this(BSONObjectID.generate, BSONObjectID.generate, email,  BCrypt.hashpw(senha, BCrypt.gensalt()), dtCriacao )
+  def this(email: String, senha:String) = {
+    this(Option(BSONObjectID.generate), Option(BSONObjectID.generate), email,  BCrypt.hashpw(senha, BCrypt.gensalt()), Option(LocalDateTime.now) )
   }
 
   def verificaSenha(senha:String):Boolean= {

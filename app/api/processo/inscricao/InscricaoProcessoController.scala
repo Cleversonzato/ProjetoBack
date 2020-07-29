@@ -12,6 +12,7 @@ class InscricaoProcessoController @Inject()(implicit ec: ExecutionContext, cc: C
 
   import reactivemongo.play.json._
   import reactivemongo.play.json.BSONFormats
-  implicit def format: OFormat[InscricaoProcesso] = Json.format[InscricaoProcesso];
+  implicit def format: OFormat[InscricaoProcesso] = Json.format[InscricaoProcesso]
 
+  override def modelName: String = "InscricaoProcesso"
 }
