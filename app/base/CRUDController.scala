@@ -25,11 +25,11 @@ abstract class CRUDController[M <: Model]  @Inject()(implicit ec: ExecutionConte
       case Right(classe)=>Ok(Json.toJson(classe))
   }}
 
-  def criar():Action[AnyContent = Action.async { implicit request: Request[AnyContent] => {
+  def criar():Action[AnyContent] = Action.async { implicit request: Request[AnyContent] => {
     trataJsonRequest(paraModelo, aoCriarModelo)
   }}
 
-  def editar():Action[AnyContent = Action.async { implicit request: Request[AnyContent] => {
+  def editar():Action[AnyContent] = Action.async { implicit request: Request[AnyContent] => {
     trataJsonRequest(paraModelo, aoEditarModelo)
   }}
 
