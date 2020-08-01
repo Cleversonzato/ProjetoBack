@@ -6,7 +6,8 @@ case class Papel(
 
 sealed trait Tipo{
   def nome:String
+  def codigo: Int
 }
-case class Administrador(nome:String="Administrador") extends Tipo
-case class Cliente(nome:String="Cliente") extends Tipo
-case class Avaliador(nome:String="Avaliador") extends Tipo
+case class Administrador(nome:String="Administrador", codigo:Int=0) extends Tipo
+case class Cliente(nome:String="Cliente",codigo:Int=1) extends Tipo
+case class Avaliador(nome:String="Avaliador", codigo:Int=2) extends Tipo

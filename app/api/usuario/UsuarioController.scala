@@ -24,17 +24,17 @@ class UsuarioController  @Inject()(implicit ec: ExecutionContext, cc: Controller
   implicit def formatAvaliador: OFormat[Avaliador] = Json.format[Avaliador]
   implicit def formatCliente: OFormat[Cliente] = Json.format[Cliente]
 
-  override def modelName: String = "Usuario"
+  override def modelName: String = "usuario"
 
-  override  def aoCriarModelo(modelo: Usuario, lang: Lang) : Future[Result] ={
-    service.criar(modelo.novo)(lang)
+  override  def aoCriarModelo(usuario: Usuario, lang: Lang) : Future[Result] ={
+    service.criar(usuario.novo)(lang)
       .flatMap(_ match {
         case Left(erro) => Future(InternalServerError(erro))
         case Right(usuario) => {
           perfilService.criar( Perfil(usuario.idPerfil, List(Papel(Cliente())), None, None, None, None, None, None, None) )(lang)
             .map(_ match {
               case Left(erro) => InternalServerError(erro)
-              case Right(classe) => Ok( Json.obj("Perfil" ->  Json.toJson(classe)) )
+              case Right(classe) => Ok( Json.obj("perfil" ->  Json.toJson(classe)) )
             })
         }
       })

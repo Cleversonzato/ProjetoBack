@@ -20,5 +20,5 @@ class PerfilController  @Inject()(implicit ec: ExecutionContext, cc: ControllerC
   implicit def formatPapel: OFormat[Papel] = Json.format[Papel]
   implicit def format: OFormat[Perfil] = Json.format[Perfil]
 
-  override def modelName: String = "Perfil"
+  override def modelName: String = "perfil"
 }
