@@ -98,6 +98,6 @@ abstract class CRUDService[M <: Model] @Inject()(implicit ec: ExecutionContext, 
   /*
   *Código das mensagens personalizáveis
   */
-  val erroCriarDuplicado = "erro.service.criar.duplicado.usuario"
+  val erroCriarDuplicado = "erro.service.criar.duplicado"
 
 }

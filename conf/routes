@@ -15,12 +15,6 @@ POST    /api/perfis/criar     api.perfil.PerfilController.criar
 PUT     /api/perfis/editar      api.perfil.PerfilController.editar
 DELETE  /api/perfis/remover/:id   api.perfil.PerfilController.remover(id: reactivemongo.bson.BSONObjectID)
 
-###### PerfilPublico
-GET     /api/perfis/publico/:id       api.perfil.publico.PerfilPublicoController.buscar(id: reactivemongo.bson.BSONObjectID)
-POST    /api/perfis/publico/criar     api.perfil.publico.PerfilPublicoController.criar
-PUT     /api/perfis/publico/editar api.perfil.publico.PerfilPublicoController.editar
-DELETE  /api/perfis/publico/remover/:id    api.perfil.publico.PerfilPublicoController.remover(id: reactivemongo.bson.BSONObjectID)
-
 ###### Processo
 GET     /api/processos/:id       api.processo.ProcessoController.buscar(id: reactivemongo.bson.BSONObjectID)
 POST    /api/processos/criar     api.processo.ProcessoController.criar

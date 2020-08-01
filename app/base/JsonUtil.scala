@@ -34,9 +34,9 @@ trait JsonUtil {
 
   def jsonJsError(erro:JsError): JsObject = {
     Json.obj(
-      "Falha na requisição:" -> erro.errors.map( e =>{
+      "erro" -> erro.errors.map( e =>{
         s"${e._1}: ${e._2.reduce( (a, b)=> JsonValidationError(a.messages.toString() + b.messages.toString())  ).messages.reduce(_+_ )}"
-      })
+      }).mkString("; ")
     )
   }
 

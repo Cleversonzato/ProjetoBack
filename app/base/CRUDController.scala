@@ -9,7 +9,8 @@ import reactivemongo.play.json._
 import scala.concurrent.{ExecutionContext, Future}
 
 
-abstract class CRUDController[M <: Model]  @Inject()(implicit ec: ExecutionContext, cc: ControllerComponents, service: CRUDService[M])  extends AbstractController(cc) with I18nSupport with Logging with JsonUtil {
+abstract class CRUDController[M <: Model]  @Inject()(implicit ec: ExecutionContext, cc: ControllerComponents, service: CRUDService[M])
+  extends AbstractController(cc) with I18nSupport with Logging with JsonUtil {
 
   //variaveis
 
@@ -40,19 +41,14 @@ abstract class CRUDController[M <: Model]  @Inject()(implicit ec: ExecutionConte
     }
   }}
 
-  def trataJsonRequest(paraModelo: JsValue=> Either[JsObject, M], acaoComModelo: (M, Lang) =>  Future[Either[JsObject, M]]) (implicit request: Request[AnyContent]): Future[Result] = {
+  def trataJsonRequest(paraModelo: JsValue=> Either[JsObject, M], acaoComModelo: (M, Lang) =>  Future[Result]) (implicit request: Request[AnyContent]): Future[Result] = {
     request.body.asJson.map{ jRequest =>
       (jRequest \ this.modelName).validate[JsValue] match {
         case JsError(erro) => Future(BadRequest( jsonErro(this.modelName + messagesApi("erro.requisicao.indefinido")(request.lang)) ))
         case JsSuccess(value, path) => {
           paraModelo( value ) match {
             case Left(erro) => Future(BadRequest(jsonErro(erro)))
-            case Right(modelo) => {
-              acaoComModelo(modelo, request.lang).map {
-                case Left(erro) => InternalServerError(erro)
-                case Right(classe) => Ok(Json.toJson(classe))
-              }
-            }
+            case Right(modelo) => acaoComModelo(modelo, request.lang)
           }
         }
       }
@@ -68,12 +64,18 @@ abstract class CRUDController[M <: Model]  @Inject()(implicit ec: ExecutionConte
     }
   }
 
-  def aoCriarModelo(modelo: M, lang: Lang) : Future[Either[JsObject, M]] ={
-    service.criar(modelo)(lang)
+  def aoCriarModelo(modelo: M, lang: Lang) : Future[Result] ={
+    service.criar(modelo)(lang).map {
+      case Left(erro) => InternalServerError(erro)
+      case Right(classe) => Ok( Json.obj(this.modelName ->  Json.toJson(classe)) )
+    }
   }
 
-  def aoEditarModelo(modelo: M, lang: Lang):  Future[Either[JsObject, M]] ={
-    service.editar(modelo)(lang)
+  def aoEditarModelo(modelo: M, lang: Lang):  Future[Result] ={
+    service.editar(modelo)(lang).map {
+      case Left(erro) => InternalServerError(erro)
+      case Right(classe) => Ok( Json.obj(this.modelName ->  Json.toJson(classe)) )
+    }
   }
 
 }

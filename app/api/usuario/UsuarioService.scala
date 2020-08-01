@@ -20,5 +20,5 @@ class UsuarioService @Inject() (implicit ec: ExecutionContext,  reactiveMongoApi
 
   override def collection: Future[JSONCollection] = mongoDef.usuarioCollection
 
-
+  override val erroCriarDuplicado = "erro.service.criar.duplicado.usuario"
 }
