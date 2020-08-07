@@ -11,10 +11,7 @@ case class Perfil(
    papeis: List[Papel],
    nome: Option[String],
    sobrenome: Option[String],
-   descricao: Option[String],
-   sexo: Option[String],
-   dtNascimento: Option[LocalDate],
-   cidade: Option[String],
-   pais: Option[String]
+   nomeUsuario: Option[String]
+
 ) extends Model
 

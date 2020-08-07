@@ -1,7 +1,7 @@
 package api.usuario
 
 import api.perfil.papel.{Administrador, Avaliador, Cliente, Papel, Tipo}
-import api.perfil.{Perfil, PerfilService}
+import api.perfil.{Perfil, PerfilController}
 import base.{CRUDController, JsonUtil}
 import javax.inject.{Inject, Singleton}
 import play.api.i18n.Lang
@@ -12,7 +12,7 @@ import scala.concurrent.impl.Promise
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class UsuarioController  @Inject()(implicit ec: ExecutionContext, cc: ControllerComponents, service:UsuarioService, perfilService: PerfilService) extends CRUDController[Usuario]{
+class UsuarioController  @Inject()(implicit ec: ExecutionContext, cc: ControllerComponents, service:UsuarioService, perfilController: PerfilController) extends CRUDController[Usuario]{
 
   import reactivemongo.play.json._
   import reactivemongo.play.json.BSONFormats
@@ -26,17 +26,14 @@ class UsuarioController  @Inject()(implicit ec: ExecutionContext, cc: Controller
 
   override def modelName: String = "usuario"
 
-  override  def aoCriarModelo(usuario: Usuario, lang: Lang) : Future[Result] ={
-    service.criar(usuario.novo)(lang)
-      .flatMap(_ match {
-        case Left(erro) => Future(InternalServerError(erro))
-        case Right(usuario) => {
-          perfilService.criar( Perfil(usuario.idPerfil, List(Papel(Cliente())), None, None, None, None, None, None, None) )(lang)
-            .map(_ match {
-              case Left(erro) => InternalServerError(erro)
-              case Right(classe) => Ok( Json.obj("perfil" ->  Json.toJson(classe)) )
-            })
-        }
-      })
+  override def criacaoEResultado(usuario: Usuario)(implicit lang: Lang): Future[Result] = {
+    criarModelo(usuario).flatMap(_ match {
+      case Left(erro) => Future(InternalServerError(erro))
+      case Right(usuario) =>
+        perfilController.criarModelo( Perfil(usuario.idPerfil, List(Papel(Cliente())), None, None, None) )
+        .map( perfilController.retornoParaResult(_) )
+    })
+
   }
+
 }

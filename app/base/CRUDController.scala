@@ -12,26 +12,18 @@ import scala.concurrent.{ExecutionContext, Future}
 abstract class CRUDController[M <: Model]  @Inject()(implicit ec: ExecutionContext, cc: ControllerComponents, service: CRUDService[M])
   extends AbstractController(cc) with I18nSupport with Logging with JsonUtil {
 
-  //variaveis
+  // variaveis
 
   import play.api.libs.json._
   implicit def format: OFormat[M]
   def modelName:String
 
-  //métodos expostos
+  // métodos expostos
 
   def buscar(id:BSONObjectID):Action[AnyContent] = Action.async  { implicit request: Request[AnyContent] =>
     service.buscar(Json.obj("id" -> id))(request.lang).map{
       case Left(erro)=> NotFound(erro)
       case Right(classe)=>Ok(Json.toJson(classe))
-  }}
-
-  def criar():Action[AnyContent] = Action.async { implicit request: Request[AnyContent] => {
-    trataJsonRequest(paraModelo, aoCriarModelo)
-  }}
-
-  def editar():Action[AnyContent] = Action.async { implicit request: Request[AnyContent] => {
-    trataJsonRequest(paraModelo, aoEditarModelo)
   }}
 
   def remover(id:BSONObjectID) = Action.async { implicit request: Request[AnyContent] => {
@@ -41,41 +33,74 @@ abstract class CRUDController[M <: Model]  @Inject()(implicit ec: ExecutionConte
     }
   }}
 
-  def trataJsonRequest(paraModelo: JsValue=> Either[JsObject, M], acaoComModelo: (M, Lang) =>  Future[Result]) (implicit request: Request[AnyContent]): Future[Result] = {
-    request.body.asJson.map{ jRequest =>
-      (jRequest \ this.modelName).validate[JsValue] match {
-        case JsError(erro) => Future(BadRequest( jsonErro(this.modelName + messagesApi("erro.requisicao.indefinido")(request.lang)) ))
-        case JsSuccess(value, path) => {
-          paraModelo( value ) match {
-            case Left(erro) => Future(BadRequest(jsonErro(erro)))
-            case Right(modelo) => acaoComModelo(modelo, request.lang)
-          }
-        }
-      }
-    }.getOrElse{
-      Future(BadRequest(jsonErro(mensagem = messagesApi("erro.requisicao.json")(request.lang))))
+  def criar():Action[AnyContent] = Action.async { implicit request: Request[AnyContent] => {
+    implicit def lang = request.lang
+    requestParaModelo(request) match {
+      case Left(erro) => erro
+      case Right(modelo) => criacaoEResultado(modelo)
     }
+  }}
+
+  def editar():Action[AnyContent] = Action.async { implicit request: Request[AnyContent] => {
+    implicit def lang = request.lang
+    requestParaModelo(request) match {
+      case Left(erro) => erro
+      case Right(modelo) => edicaoEResultado(modelo)
+    }
+  }}
+
+  // métodos agregadores
+  def requestParaModelo(request: Request[AnyContent])(implicit lang:Lang): Either[Future[Result], M] ={
+    requestParaBody(request).flatMap( bodyParaJsModel(_).flatMap( jsModelParaModel(_) ) )
   }
 
-  def paraModelo(jBody:JsValue): Either[JsObject, M] = {
-    Json.fromJson[M](jBody) match {
+  def criacaoEResultado(modelo: M)(implicit lang:Lang): Future[Result]  ={
+    criarModelo(modelo).map( retornoParaResult(_) )
+  }
+
+  def edicaoEResultado(modelo: M)(implicit lang:Lang): Future[Result]  ={
+    editarModelo(modelo).map( retornoParaResult(_))
+  }
+
+  // métodos/ funções
+
+  def requestParaBody(request: Request[AnyContent])(implicit lang:Lang): Either[Future[Result], JsValue] ={
+    request.body.asJson.map( Right(_) )
+        .getOrElse{  Left(Future(BadRequest(jsonErro(mensagem = messagesApi("erro.requisicao.json")))))   }
+  }
+
+  def bodyParaJsModel(json: JsValue)(implicit lang:Lang): Either[Future[Result], JsValue] ={
+    (json \ this.modelName).validate[JsValue] match {
       case JsSuccess(value, path) => Right(value)
-      case erro @ JsError(_) => {Left(jsonJsError(erro)) }
+      case JsError(erro) => Left(Future(BadRequest( jsonErro(this.modelName + messagesApi("erro.requisicao.indefinido")) )))
     }
   }
 
-  def aoCriarModelo(modelo: M, lang: Lang) : Future[Result] ={
-    service.criar(modelo)(lang).map {
-      case Left(erro) => InternalServerError(erro)
-      case Right(classe) => Ok( Json.obj(this.modelName ->  Json.toJson(classe)) )
+  def jsModelParaModel(json: JsValue)(implicit lang:Lang): Either[Future[Result], M] = {
+    Json.fromJson[M](json) match {
+      case JsSuccess(value, path) => Right(value)
+      case erro @ JsError(_) => Left(Future(BadRequest(jsonJsError(erro))))
     }
   }
 
-  def aoEditarModelo(modelo: M, lang: Lang):  Future[Result] ={
-    service.editar(modelo)(lang).map {
-      case Left(erro) => InternalServerError(erro)
-      case Right(classe) => Ok( Json.obj(this.modelName ->  Json.toJson(classe)) )
-    }
+  def criarModelo(modelo: M)(implicit lang:Lang): Future[Either[JsObject, M]] = {
+    service.criar(modelo)(lang)
   }
+
+  def editarModelo(modelo: M)(implicit lang:Lang): Future[Either[JsObject, M]] = {
+    service.editar(modelo)(lang)
+  }
+
+  def retornoParaResult(retorno: Either[JsObject, M])(implicit lang:Lang): Result ={
+    retorno match {
+        case Left(erro) => InternalServerError(erro)
+        case Right(modelo) => modeloParaResult(modelo)
+      }
+  }
+
+  def modeloParaResult(modelo:M)(implicit lang:Lang): Result={
+    Ok( Json.obj(this.modelName ->  Json.toJson(modelo)) )
+  }
+
 
 }

@@ -5,6 +5,7 @@
 
 ###### Usuario
 GET     /api/usuarios/:id       api.usuario.UsuarioController.buscar(id: reactivemongo.bson.BSONObjectID)
++nocsrf
 POST    /api/usuarios/criar     api.usuario.UsuarioController.criar
 PUT     /api/usuarios/editar    api.usuario.UsuarioController.editar
 DELETE  /api/usuarios/remover/:id   api.usuario.UsuarioController.remover(id: reactivemongo.bson.BSONObjectID)
