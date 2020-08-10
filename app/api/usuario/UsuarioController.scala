@@ -2,7 +2,7 @@ package api.usuario
 
 import api.perfil.papel.{Administrador, Avaliador, Cliente, Papel, Tipo}
 import api.perfil.{Perfil, PerfilController}
-import base.{CRUDController, JsonUtil}
+import base.CRUDController
 import javax.inject.{Inject, Singleton}
 import play.api.i18n.Lang
 import play.api.libs.json.{JsError, JsObject, JsPath, JsResult, JsSuccess, JsValue, Json, OFormat, OWrites, Reads}
@@ -30,8 +30,8 @@ class UsuarioController  @Inject()(implicit ec: ExecutionContext, cc: Controller
     criarModelo(usuario).flatMap(_ match {
       case Left(erro) => Future(InternalServerError(erro))
       case Right(usuario) =>
-        perfilController.criarModelo( Perfil(usuario.idPerfil, List(Papel(Cliente())), None, None, None) )
-        .map( perfilController.retornoParaResult(_) )
+        perfilController.criacaoEResultado( Perfil(usuario.idPerfil, List(Papel(Cliente())), None, None, None) )
+      //  .map( perfilController.retornoParaResult(_) )
     })
 
   }

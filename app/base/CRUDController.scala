@@ -6,17 +6,23 @@ import play.api.Logging
 import play.api.i18n._
 import reactivemongo.bson.BSONObjectID
 import reactivemongo.play.json._
-import scala.concurrent.{ExecutionContext, Future}
 
+import scala.concurrent.{ExecutionContext, Future}
+import base.mensagens.JsonMsg._
+import base.mensagens._
 
 abstract class CRUDController[M <: Model]  @Inject()(implicit ec: ExecutionContext, cc: ControllerComponents, service: CRUDService[M])
-  extends AbstractController(cc) with I18nSupport with Logging with JsonUtil {
+  extends AbstractController(cc) with I18nSupport with Logging  {
 
-  // variaveis
+  // atributos
 
   import play.api.libs.json._
   implicit def format: OFormat[M]
   def modelName:String
+
+  def teste = {
+    JsonMsg(Sucesso(), "teste")
+  }
 
   // métodos expostos
 
@@ -66,20 +72,23 @@ abstract class CRUDController[M <: Model]  @Inject()(implicit ec: ExecutionConte
 
   def requestParaBody(request: Request[AnyContent])(implicit lang:Lang): Either[Future[Result], JsValue] ={
     request.body.asJson.map( Right(_) )
-        .getOrElse{  Left(Future(BadRequest(jsonErro(mensagem = messagesApi("erro.requisicao.json")))))   }
+        .getOrElse{  Left(Future(BadRequest(JsonMsg(Erro(), messagesApi("erro.requisicao.json")))))   }
+//      .getOrElse{  Left(Future(BadRequest(jsonErro(mensagem = messagesApi("erro.requisicao.json")))))   }
   }
 
   def bodyParaJsModel(json: JsValue)(implicit lang:Lang): Either[Future[Result], JsValue] ={
     (json \ this.modelName).validate[JsValue] match {
       case JsSuccess(value, path) => Right(value)
-      case JsError(erro) => Left(Future(BadRequest( jsonErro(this.modelName + messagesApi("erro.requisicao.indefinido")) )))
+//      case JsError(erro) => Left(Future(BadRequest( jsonErro(this.modelName + messagesApi("erro.requisicao.indefinido")) )))
+      case JsError(erro) => Left(Future(BadRequest( JsonMsg(Erro(), this.modelName + messagesApi("erro.requisicao.indefinido")) )))
     }
   }
 
   def jsModelParaModel(json: JsValue)(implicit lang:Lang): Either[Future[Result], M] = {
     Json.fromJson[M](json) match {
       case JsSuccess(value, path) => Right(value)
-      case erro @ JsError(_) => Left(Future(BadRequest(jsonJsError(erro))))
+//      case erro @ JsError(_) => Left(Future(BadRequest(jsonJsError(erro))))
+      case erro @ JsError(_) => Left(Future(BadRequest(JsonMsg(Erro(), erro))))
     }
   }
 

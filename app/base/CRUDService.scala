@@ -14,8 +14,11 @@ import play.api.i18n._
 
 import scala.collection.Factory
 import scala.concurrent.{ExecutionContext, Future}
+import base.mensagens.JsonMsg._
+import base.mensagens._
 
-abstract class CRUDService[M <: Model] @Inject()(implicit ec: ExecutionContext, reactiveMongoApi: ReactiveMongoApi, mongoDef: MongoIndexes, messagesApi: MessagesApi) extends Logging with JsonUtil  {
+abstract class CRUDService[M <: Model] @Inject()(implicit ec: ExecutionContext, reactiveMongoApi: ReactiveMongoApi, mongoDef: MongoIndexes, messagesApi: MessagesApi)
+  extends Logging   {
 
   import reactivemongo.play.json._
   implicit def format: OFormat[M]
@@ -32,7 +35,7 @@ abstract class CRUDService[M <: Model] @Inject()(implicit ec: ExecutionContext, 
         .map {Right(_)}
     } recover {
       case e => logger.error("erro ao buscar " + query + ". Erro: " + e)
-        Left(jsonErro(  messagesApi("erro.service.listar")(lang) ))
+        Left( JsonMsg(Erro(), messagesApi("erro.service.listar")(lang) ))
     }
   }
 
@@ -41,10 +44,10 @@ abstract class CRUDService[M <: Model] @Inject()(implicit ec: ExecutionContext, 
       _.find(query, Option.empty[JsObject]).one[M]
     }.map {
       case Some(classe) => Right(classe)
-      case None => Left( jsonErro( messagesApi("erro.service.buscar.vazio")(lang)  + query ))
+      case None => Left(  JsonMsg(Erro(), messagesApi("erro.service.buscar.vazio")(lang)  + query ))
     }.recover {
       case e => logger.error("erro ao buscar " + query + ". Erro: " + e)
-        Left( jsonErro( messagesApi("erro.service.buscar")(lang) + query ))
+        Left( JsonMsg(Erro(), messagesApi("erro.service.buscar")(lang) + query ))
     }
   }
 
@@ -56,14 +59,14 @@ abstract class CRUDService[M <: Model] @Inject()(implicit ec: ExecutionContext, 
       case e: DatabaseException => {
         if (e.code.get == 11000) {
           logger.warn("criar: " + e)
-          Left(jsonErro( messagesApi(this.erroCriarDuplicado)(lang) ))
+          Left( JsonMsg(Erro(), messagesApi(this.erroCriarDuplicado)(lang) ))
         } else {
           logger.error("criar: " + e)
-          Left(jsonErro( messagesApi("erro.service.criar")(lang) + e.getMessage()) )
+          Left( JsonMsg(Erro(), messagesApi("erro.service.criar")(lang) + e.getMessage()) )
         }
       }case ex =>
         logger.error("Criar: " + ex)
-        Left( jsonErro(  Json.obj( "MongoDb" -> ex.toString, "loc"-> ex.getLocalizedMessage, "msg" -> ex.getMessage, "str"->ex.toString  )) )
+        Left(  JsonMsg(Erro(),  Json.obj( "MongoDb" -> ex.toString, "loc"-> ex.getLocalizedMessage, "msg" -> ex.getMessage, "str"->ex.toString  )) )
     }
   }
 
@@ -72,7 +75,7 @@ abstract class CRUDService[M <: Model] @Inject()(implicit ec: ExecutionContext, 
       .map { writeResult => {
         if (writeResult.n == 0) {
           logger.warn("Nenhum documento foi atualizado. A chave de busca: " + model.id + " está correta?")
-          Left(jsonErro( messagesApi("erro.service.editar")(lang) ))
+          Left(  JsonMsg(Erro(), messagesApi("erro.service.editar")(lang) ))
         } else {
           logger.info("atualizar: id = " + model.id + " " + writeResult)
           Right(model)
@@ -80,7 +83,7 @@ abstract class CRUDService[M <: Model] @Inject()(implicit ec: ExecutionContext, 
       }
       }.recover{
       case ex=> logger.error("erro ao atualizar o objeto com  id: " +  model.id + ". Erro: "+ ex)
-        Left( jsonErro(  Json.obj( "MongoDb" -> ex.toString, "loc"-> ex.getLocalizedMessage, "msg" -> ex.getMessage, "str"->ex.toString  )) )
+        Left(  JsonMsg(Erro(),  Json.obj( "MongoDb" -> ex.toString, "loc"-> ex.getLocalizedMessage, "msg" -> ex.getMessage, "str"->ex.toString  )) )
     }
   }
 
@@ -88,10 +91,10 @@ abstract class CRUDService[M <: Model] @Inject()(implicit ec: ExecutionContext, 
     this.collection.flatMap(_.delete.one(BSONDocument("_id"-> _id) ) )
       .map { writeResult =>
         logger.info("excluir: id = " + _id +" " + writeResult)
-        Right(jsonSucesso( messagesApi("sucesso.service.remover")(lang), "Excluir" ))
+        Right( JsonMsg(Sucesso(), (messagesApi("sucesso.service.remover")(lang), "Excluir") ))
       }.recover{
       case ex=> logger.error("erro ao excluir o objeto com  id: " +  _id + ". Erro: "+ ex)
-        Left( jsonErro(  Json.obj( "MongoDb" -> ex.toString, "loc"-> ex.getLocalizedMessage, "msg" -> ex.getMessage, "str"->ex.toString  )) )
+        Left(  JsonMsg(Erro(), Json.obj( "MongoDb" -> ex.toString, "loc"-> ex.getLocalizedMessage, "msg" -> ex.getMessage, "str"->ex.toString  )) )
     }
   }
 
